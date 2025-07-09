@@ -20,7 +20,7 @@ class HomepageController extends Controller
         if ($theme) {
             $this->themeFolder = $theme->folder;
         } else {
-            $this->themeFolder = 'default';
+            $this->themeFolder = 'theme.default';
         }
     }
 
