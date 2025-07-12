@@ -1,21 +1,22 @@
-# PHB Ecommerce
+# Ecommerce Gozeal Store
 
-Proyek ini merupakan aplikasi ecommerce sederhana yang dikembangkan sebagai bahan ajar untuk mata kuliah **Pemrograman Web 2** di Politeknik Harapan Bersama Tegal.
+Proyek ini merupakan aplikasi ecommerce sederhana bernama **Gozeal Store** yang dikembangkan sebagai tugas dan bahan ajar untuk mata kuliah **Pemrograman Web 2** di Politeknik Harapan Bersama Tegal.
 
 ## Fitur Utama
 
-- Manajement Product Category
+- Manajemen Product Category
 - Manajemen Product
 - Login & Register Customer
-- Keranjang belanja
-- Proses checkout
+- Keranjang Belanja
+- Proses Checkout
 - Dashboard Customer
+
 ## Instalasi
 
 1. Clone repository ini:
     ```bash
-    git clone https://github.com/jamalapriadi/phb_ecommerce.git
-    cd phb_ecommerce
+    git clone https://github.com/NurAjiPurnomo/gozealstore.git
+    cd gozealstore
     ```
 2. Jalankan perintah berikut untuk menginstall dependency PHP:
     ```bash
@@ -41,4 +42,4 @@ Kontribusi sangat terbuka untuk pengembangan lebih lanjut. Silakan buat pull req
 
 ## Lisensi
 
-Proyek ini hanya digunakan untuk keperluan pembelajaran.
+Proyek ini dibuat hanya untuk keperluan pembelajaran.
