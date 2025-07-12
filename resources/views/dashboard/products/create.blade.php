@@ -18,7 +18,7 @@
 
         <flux:input label="Name" name="name" class="mb-3" />
 
-        <flux:input label="Slug" name="slug" class="mb-3" />
+        <!-- Hapus input slug karena slug akan di-generate otomatis -->
 
         <flux:input label="SKU" name="sku" class="mb-3" />
 

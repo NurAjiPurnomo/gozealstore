@@ -3,147 +3,172 @@
 <head>
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1">
-   <title>{{ $title ?? ''}}</title>
-   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+   <title>{{ $title ?? '' }}</title>
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
    {{ $style ?? '' }}
 
    <style>
-      .category-card {
-            transition: transform 0.3s;
-            height: 100%;
+      /* Style global tema hitam putih */
+      body {
+         background-color: #fff !important;
+         color: #000 !important;
       }
-      .category-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+      a, a:hover, a:focus {
+         color: #000 !important;
+         text-decoration: none !important;
       }
-      .category-img {
-            height: 120px;
-            object-fit: cover;
+      .navbar, .footer {
+         background-color: #000 !important;
+         color: #fff !important;
       }
-      .card-body {
-            padding: 0.75rem;
+      .navbar a, .footer a {
+         color: #fff !important;
       }
-      .card-title {
-            font-size: 1rem;
-            margin-bottom: 0.5rem;
+      .btn, .btn-outline-dark {
+         background-color: #000 !important;
+         color: #fff !important;
+         border-color: #000 !important;
       }
-      .card-text {
-            font-size: 0.85rem;
-            margin-bottom: 0.5rem;
+      .btn:hover, .btn-outline-dark:hover {
+         background-color: #fff !important;
+         color: #000 !important;
+         border-color: #000 !important;
       }
-      .btn-sm {
-            font-size: 0.8rem;
-            padding: 0.25rem 0.5rem;
+      .category-card, .product-card {
+         transition: transform 0.3s;
+         height: 100%;
+         background-color: #fff !important;
+         color: #000 !important;
       }
-
-      .product-card {
-            transition: transform 0.3s;
-            height: 100%;
+      .category-card:hover, .product-card:hover {
+         transform: scale(1.05);
+         box-shadow: 0 3px 6px rgba(0,0,0,0.15);
       }
-      .product-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+      .footer-link {
+         color: #fff;
+         text-decoration: none;
+         margin: 0 0.5rem;
+         font-size: 0.9rem;
+         transition: color 0.3s;
       }
-      .product-img {
-            height: 120px;
-            object-fit: cover;
+      .footer-link:hover {
+         color: #ffc107;
       }
-      .btn-sm {
-            font-size: 0.8rem;
-            padding: 0.25rem 0.5rem;
+      .social-icon {
+         display: inline-flex;
+         align-items: center;
+         justify-content: center;
+         width: 36px;
+         height: 36px;
+         margin: 0 0.25rem;
+         background: rgba(255,255,255,0.2);
+         border-radius: 50%;
+         color: #fff;
+         font-size: 1rem;
+         transition: background 0.3s, color 0.3s;
       }
-      .rating {
-            color: #ffc107;
-            font-size: 0.85rem;
+      .social-icon:hover {
+         background: #ffc107;
+         color: #343a40;
       }
-
-      .cart-item {
-            border-bottom: 1px solid #dee2e6;
-            padding: 0.75rem 0;
+      /* Tambahan untuk hover tombol login dan register */
+      .btn-outline-dark:hover, .btn-dark:hover {
+         background-color: #fff !important;
+         color: #000 !important;
+         border-color: #000 !important;
       }
-      .cart-img {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-      }
-      .cart-item-name {
-            font-size: 1rem;
-            font-weight: 500;
-      }
-      .cart-item-price, .cart-item-subtotal {
-            font-size: 0.85rem;
-      }
-      .btn-sm {
-            font-size: 0.8rem;
-            padding: 0.25rem 0.5rem;
-      }
-      .quantity-input {
-            width: 60px;
-            font-size: 0.85rem;
-            padding: 0.25rem;
-      }
-      .total-section {
-            font-size: 1rem;
-      }
-      @media (max-width: 576px) {
-            .cart-img {
-                  width: 60px;
-                  height: 60px;
-            }
-            .cart-item-name {
-                  font-size: 0.9rem;
-            }
-            .cart-item-price, .cart-item-subtotal {
-                  font-size: 0.8rem;
-            }
-            .quantity-input {
-                  width: 50px;
-            }
-      }
++     /* Lebar container-fluid lebih besar di desktop */
++     @media (min-width: 1200px) {
++        .container-fluid {
++           max-width: 1400px !important;
++           padding-left: 15px;
++           padding-right: 15px;
++        }
++     }
    </style>
 </head>
 <body>
-  
-      <x-navbar themeFolder="{{ $themeFolder }}"></x-navbar>
 
-      <div class="container-fluid py-4">
-            {{  $slot }}
+      {{-- Navbar --}}
+   <x-navbar themeFolder="{{ $themeFolder }}"></x-navbar>
+
+   {{-- Konten --}}
+   <main class="container-fluid my-5" style="padding-top: 80px;">
+      {{ $slot }}
+   </main>
+
+
+  <footer class="pt-5 pb-4" style="background: linear-gradient(90deg, #272727ff 0%, #ffffffff 100%); color: #000;">
+  <div class="container">
+    <div class="row text-center text-md-start">
+
+      <!-- Logo & deskripsi -->
+      <div class="col-md-3 mb-4">
+        <h5 class="mb-3 d-flex justify-content-center justify-content-md-start align-items-center">
+          <img src="https://d2kchovjbwl1tk.cloudfront.net/vendors/prod/414773/assets/image/1659409259666-LOGO%202_resized256-png.webp" 
+               srcset="https://d2kchovjbwl1tk.cloudfront.net/vendors/prod/414773/assets/image/1659409259666-LOGO%202_resized128-png.webp 128w,
+                       https://d2kchovjbwl1tk.cloudfront.net/vendors/prod/414773/assets/image/1659409259666-LOGO%202_resized256-png.webp 256w,
+                       https://d2kchovjbwl1tk.cloudfront.net/vendors/prod/414773/assets/image/1659409259666-LOGO%202_resized512-png.webp 512w,
+                       https://d2kchovjbwl1tk.cloudfront.net/vendors/prod/414773/assets/image/1659409259666-LOGO%202_resized1024-png.webp 1024w,
+                       https://d2kchovjbwl1tk.cloudfront.net/vendors/prod/414773/assets/image/1659409259666-LOGO%202_resized2048-png.webp 2048w" 
+               sizes="(max-width: 600px) 20vw, 256px" 
+               alt="Logo of GOZEAL" style="max-width: 100%; height: 24px; width: auto;">
+        </h5>
+        <p class="small text-muted">Belanja nyaman & aman di toko online kami. Temukan produk terbaik untukmu.</p>
       </div>
 
-      <footer class="bg-dark text-white pt-4 mt-5" style="background: linear-gradient(90deg, #4e54c8 0%, #8f94fb 100%);">
-            <div class="container p-3">
-                  <div class="row">
-                        <div class="col-md-6 mb-3">
-                              <h5 class="mb-3">E-Commerce</h5>
-                              <p class="small">Belanja mudah, cepat, dan aman di toko online kami. Temukan produk favorit Anda dengan harga terbaik.</p>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                              <h6 class="mb-3">Navigasi</h6>
-                              <ul class="list-unstyled">
-                                    <li><a href="#" class="text-white text-decoration-none">Beranda</a></li>
-                                    <li><a href="#" class="text-white text-decoration-none">Produk</a></li>
-                                    <li><a href="#" class="text-white text-decoration-none">Kategori</a></li>
-                                    <li><a href="#" class="text-white text-decoration-none">Kontak</a></li>
-                              </ul>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                              <h6 class="mb-3">Kontak Kami</h6>
-                              <ul class="list-unstyled small">
-                                    <li><i class="bi bi-envelope"></i> info@ecommerce.com</li>
-                                    <li><i class="bi bi-telephone"></i> +62 856 6100 994</li>
-                                    <li><i class="bi bi-geo-alt"></i> Tegal, Indonesia</li>
-                              </ul>
-                        </div>
-                  </div>
-                  <hr class="bg-secondary">
-                  <div class="text-center pb-3">
-                        <small>© {{ date('Y') }} E-Commerce. All rights reserved.</small>
-                  </div>
-            </div>
-      </footer>
+      <!-- Navigasi cepat -->
+      <div class="col-md-3 mb-4">
+        <h6 class="text-uppercase mb-3">Navigasi</h6>
+        <ul class="list-unstyled">
+          <li class="mb-2"><a href="/" class="text-dark text-decoration-none">Beranda</a></li>
+          <li class="mb-2"><a href="/products" class="text-dark text-decoration-none">Produk</a></li>
+          <li class="mb-2"><a href="/categories" class="text-dark text-decoration-none">Kategori</a></li>
+          <li class="mb-2"><a href="/contact" class="text-dark text-decoration-none">Kontak</a></li>
+        </ul>
+      </div>
 
-  
-   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+      <!-- Toko Offline -->
+      <div class="col-md-3 mb-4">
+        <h6 class="text-uppercase mb-3">Toko Offline Kami</h6>
+        <ul class="list-unstyled small">
+          <li class="mb-2"><i class="bi bi-geo-alt me-2"></i> DEPAN MAN 2, Jl. K.H. Abdul Hadi, Cipare, Serang, Banten 42117</li>
+          <li class="mb-2"><i class="bi bi-clock me-2"></i> Buka: Senin - Sabtu, 09.00 - 17.00</li>
+          <li class="mb-2"><i class="bi bi-telephone me-2"></i> +62 856 6100 994</li>
+        </ul>
+      </div>
+
+      <!-- Sosial media -->
+      <div class="col-md-3 mb-4">
+        <h6 class="text-uppercase mb-3">Ikuti Kami</h6>
+        <div>
+          <a href="#" class="d-inline-block text-dark text-center me-2" style="width:36px;height:36px;line-height:36px;border-radius:50%;background:rgba(0,0,0,0.1);">
+            <i class="bi bi-facebook"></i>
+          </a>
+          <a href="#" class="d-inline-block text-dark text-center me-2" style="width:36px;height:36px;line-height:36px;border-radius:50%;background:rgba(0,0,0,0.1);">
+            <i class="bi bi-instagram"></i>
+          </a>
+          <a href="#" class="d-inline-block text-dark text-center me-2" style="width:36px;height:36px;line-height:36px;border-radius:50%;background:rgba(0,0,0,0.1);">
+            <i class="bi bi-twitter"></i>
+          </a>
+          <a href="#" class="d-inline-block text-dark text-center" style="width:36px;height:36px;line-height:36px;border-radius:50%;background:rgba(0,0,0,0.1);">
+            <i class="bi bi-youtube"></i>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <hr class="border-dark">
+
+    <div class="text-center small text-muted">
+      © {{ date('Y') }} E-Commerce. All rights reserved.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

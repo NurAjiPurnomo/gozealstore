@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Categories;
 use App\Models\Product;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -37,12 +38,34 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
+    private function generateUniqueSlug($name, $id = null)
+    {
+        $slug = Str::slug($name);
+        $originalSlug = $slug;
+        $count = 1;
+
+        while (\App\Models\Product::where('slug', $slug)
+            ->when($id, function ($query) use ($id) {
+                return $query->where('id', '!=', $id);
+            })->exists()) {
+            $slug = $originalSlug . '-' . $count;
+            $count++;
+        }
+
+        return $slug;
+    }
+
     public function store(Request $request)
     {
+        if (!$request->filled('slug')) {
+            $request->merge(['slug' => $this->generateUniqueSlug($request->name)]);
+        }
+
         // Validasi input produk
         $validator = \Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:products,slug',
+            // hapus validasi slug karena slug tidak diinput user
             'sku' => 'required|string|unique:products,sku',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
@@ -112,9 +135,13 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
 
+        if (!$request->filled('slug')) {
+            $request->merge(['slug' => $this->generateUniqueSlug($request->name, $product->id)]);
+        }
+
         $validator = \Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:products,slug,' . $product->id,
+            // hapus validasi slug karena slug tidak diinput user
             'description' => 'nullable|string',
             'sku' => 'required|string|unique:products,sku,' . $product->id,
             'price' => 'required|numeric|min:0',

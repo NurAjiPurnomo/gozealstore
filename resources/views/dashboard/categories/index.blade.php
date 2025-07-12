@@ -1,22 +1,114 @@
 <x-layouts.app :title="__('Categories')">
+    <style>
+        /* Tambahan style custom */
+        .card-table {
+            background: #fff;
+            border-radius: .75rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: box-shadow 0.3s ease;
+        }
+        .card-table:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+        .table-header {
+            background-color: #e0e0e0;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+        }
+        tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+        .truncate-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .btn-add-category {
+            background-color: #000;
+            color: #fff;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            transition: background-color 0.3s ease;
+        }
+        .btn-add-category:hover {
+            background-color: #333;
+        }
+        .btn-actions {
+            background-color: #f0f0f0;
+            color: #000;
+            font-weight: 500;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.375rem;
+            transition: background-color 0.3s ease;
+        }
+        .btn-actions:hover {
+            background-color: #dcdcdc;
+        }
+
+        /* Responsive styles for mobile */
+        @media (max-width: 768px) {
+            .card-table {
+                box-shadow: none;
+                border-radius: 0;
+                overflow-x: visible;
+            }
+            table {
+                border-collapse: separate;
+                border-spacing: 0 0.75rem;
+            }
+            thead {
+                display: none;
+            }
+            tbody tr {
+                display: block;
+                background: #fff;
+                border-radius: 0.75rem;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                margin-bottom: 0.75rem;
+                padding: 1rem;
+            }
+            tbody tr:hover {
+                background-color: #f9f9f9;
+                box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            }
+            tbody tr td {
+                display: flex;
+                justify-content: space-between;
+                padding: 0.5rem 0;
+                border: none;
+                border-bottom: 1px solid #e0e0e0;
+            }
+            tbody tr td:last-child {
+                border-bottom: none;
+            }
+            tbody tr td::before {
+                content: attr(data-label);
+                font-weight: 700;
+                color: #333;
+                flex-basis: 50%;
+                text-align: left;
+            }
+        }
+    </style>
+
     <div class="relative mb-6 w-full">
         <flux:heading size="xl">Product Categories</flux:heading>
-        <flux:subheading size="lg" class="mb-6">Manage data Product Categories</flux:heading>
+        <flux:subheading size="lg" class="mb-6">Manage product categories easily and quickly</flux:subheading>
         <flux:separator variant="subtle" />
     </div>
 
-    <div class="flex justify-between items-center mb-4">
-        <div>
-            <form action="{{ route('categories.index') }}" method="get">
-                @csrf
-                <flux:input icon="magnifying-glass" name="q" value="{{ $q }}" placeholder="Search Product Categories" />
-            </form>
-        </div>
-        <div>
-            <flux:button icon="plus">
-                <flux:link href="{{ route('categories.create') }}" variant="subtle">Add New Category</flux:link>
-            </flux:button>
-        </div>
+    <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-2">
+        <form action="{{ route('categories.index') }}" method="get" class="w-full md:w-auto">
+            <flux:input icon="magnifying-glass" name="q" value="{{ $q }}" placeholder="Search categories..." />
+        </form>
+        <flux:button icon="plus" class="btn-add-category">
+            <flux:link href="{{ route('categories.create') }}" variant="subtle">Add New Category</flux:link>
+        </flux:button>
     </div>
 
     @if(session()->has('successMessage'))
@@ -25,95 +117,66 @@
         </div>
     @endif
 
-    <div class="overflow-x-auto">
-        <table class="min-w-full leading-normal">
+    <div class="card-table overflow-x-auto">
+                <table class="min-w-full" role="table">
             <thead>
-                <tr>
-                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                        ID
-                    </th>
-                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                        Image
-                    </th>
-                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                        Name
-                    </th>
-                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                        Slug
-                    </th>
-                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                        Description
-                    </th>
-                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                        Created At
-                    </th>
-                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                        Actions
-                    </th>
+                <tr class="table-header">
+                    <th class="px-5 py-3 text-left">#</th>
+                    <th class="px-5 py-3 text-left">Image</th>
+                    <th class="px-5 py-3 text-left">Name</th>
+                    <th class="px-5 py-3 text-left">Slug</th>
+                    <th class="px-5 py-3 text-left">Description</th>
+                    <th class="px-5 py-3 text-left">Created</th>
+                    <th class="px-5 py-3 text-left">Actions</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($categories as $key=>$category)
-                    <tr>
-                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                            <p class="text-gray-900 whitespace-no-wrap">
-                                {{ $key+1 }}
-                            </p>
-                        </td>
-                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                            <p class="text-gray-900 whitespace-no-wrap">
-                                @if($category->image)
-                                    <img src="{{ $category->image }}" alt="{{ $category->name }}" class="h-10 w-10 object-cover rounded">
-                                @else
-                                    <div class="h-10 w-10 bg-gray-200 flex items-center justify-center rounded">
-                                        <span class="text-gray-500 text-sm">N/A</span>
-                                    </div>
-                                @endif
-                            </p>
-                        </td>
-                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                            <p class="text-gray-900 whitespace-no-wrap">
-                                {{ $category->name }}
-                            </p>
-                        </td>
-                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                            <p class="text-gray-900 whitespace-no-wrap">
-                                {{ $category->slug }}
-                            </p>
-                        </td>
-                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                            <p class="text-gray-900">
-                                {{  $category->description }}
-                            </p>
-                        </td>
-                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                            <p class="text-gray-900 whitespace-no-wrap">
-                                {{ $category->created_at }}
-                            </p>
-                        </td>
-                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-
-                            <flux:dropdown>
-                                <flux:button icon:trailing="chevron-down">Actions</flux:button>
-
-                                <flux:menu>
-                                    <flux:menu.item icon="pencil" href="{{ route('categories.edit', $category->id) }}">Edit</flux:menu.item>
-                                    <flux:menu.item icon="trash" variant="danger" onclick="event.preventDefault(); if(confirm('Are you sure you want to delete this category?')) document.getElementById('delete-form-{{ $category->id }}').submit();">Delete</flux:menu.item>
-                                    <form id="delete-form-{{ $category->id }}" action="{{ route('categories.destroy', $category->id) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                </flux:menu>
-                            </flux:dropdown>
-                        </td>
-                    </tr>
-                @endforeach
+                @forelse($categories as $key=>$category)
+                <tr class="border-t" role="row">
+                    <td class="px-5 py-4" data-label="#" role="cell">{{ $key+1 }}</td>
+                    <td class="px-5 py-4" data-label="Image" role="cell">
+                        @if($category->image)
+                            <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}" class="h-10 w-10 object-cover rounded">
+                        @else
+                            <div class="h-10 w-10 bg-gray-200 flex items-center justify-center rounded text-xs text-gray-500">N/A</div>
+                        @endif
+                    </td>
+                    <td class="px-5 py-4 font-medium" data-label="Name" role="cell">{{ $category->name }}</td>
+                    <td class="px-5 py-4" data-label="Slug" role="cell">
+                        <span class="inline-block bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded">
+                            {{ $category->slug }}
+                        </span>
+                    </td>
+                    <td class="px-5 py-4 text-zinc-700 max-w-xs whitespace-pre-line break-words" data-label="Description" role="cell">
+                        {{ $category->description }}
+                    </td>
+                    <td class="px-5 py-4 text-gray-500 text-sm" data-label="Created" role="cell">
+                        {{ $category->created_at->format('d M Y') }}
+                    </td>
+                    <td class="px-5 py-4" data-label="Actions" role="cell">
+                        <flux:dropdown>
+                            <flux:button icon:trailing="chevron-down" size="sm" class="btn-actions">Actions</flux:button>
+                            <flux:menu>
+                                <flux:menu.item icon="pencil" href="{{ route('categories.edit', $category->id) }}">Edit</flux:menu.item>
+                                <flux:menu.item icon="trash" variant="danger" onclick="event.preventDefault(); if(confirm('Are you sure?')) document.getElementById('delete-form-{{ $category->id }}').submit();">Delete</flux:menu.item>
+                                <form id="delete-form-{{ $category->id }}" action="{{ route('categories.destroy', $category->id) }}" method="POST" class="hidden">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
+                            </flux:menu>
+                        </flux:dropdown>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="7" class="px-5 py-4 text-center text-gray-500">No categories found.</td>
+                </tr>
+                @endforelse
             </tbody>
         </table>
-
-        <div class="mt-3">
-            {{ $categories->links() }}
-        </div>
     </div>
-    
+
+    <div class="mt-4">
+        {{ $categories->links() }}
+    </div>
 </x-layouts.app>

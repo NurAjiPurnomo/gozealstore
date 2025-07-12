@@ -48,6 +48,12 @@ class HomepageController extends Controller
 
         $products = $query->paginate(20);
 
+        // Ensure image_url accessor is appended for each product
+        $products->getCollection()->transform(function ($product) {
+            $product->append('image_url');
+            return $product;
+        });
+
         return view($this->themeFolder.'.products',[
             'title'=>$title,
             'products' => $products,
@@ -89,6 +95,12 @@ class HomepageController extends Controller
 
         if($category){
             $products = Product::where('product_category_id',$category->id)->paginate(20);
+
+            // Append image_url accessor for each product
+            $products->getCollection()->transform(function ($product) {
+                $product->append('image_url');
+                return $product;
+            });
 
             return view($this->themeFolder.'.category_by_slug', [
                 'slug' => $slug, 
