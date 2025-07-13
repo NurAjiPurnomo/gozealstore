@@ -75,7 +75,8 @@
                 @foreach($cart->items as $item)
                 <div class="cart-item-card mb-3 d-flex align-items-center justify-content-between">
                     <div class="d-flex align-items-center">
-                        <img src="{{ $item->itemable->image_url ?? 'https://via.placeholder.com/80?text=Product' }}" class="cart-img me-3" alt="{{ $item->itemable->name }}">
+                        <!-- <img src="{{ $item->itemable->image_url ?? 'https://via.placeholder.com/80?text=Product' }}" class="cart-img me-3" alt="{{ $item->itemable->name }}"> -->
+                         <img src="{{ $item->itemable->image_url ? asset('storage/' . $item->itemable->image_url) : 'https://via.placeholder.com/80?text=Product' }}" class="cart-img me-3 rounded" alt="{{ $item->itemable->name }}">xa
                         <div>
                             <div class="cart-item-name">{{ $item->itemable->name }}</div>
                             <div class="cart-item-price">Rp {{ number_format($item->itemable->price, 0, ',', '.') }}</div>

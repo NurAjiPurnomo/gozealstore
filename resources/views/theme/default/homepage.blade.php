@@ -160,11 +160,12 @@
                                 $imgUrl = 'https://via.placeholder.com/350x200?text=No+Image';
                             }
                         @endphp
-                        <img 
+                        <!-- <img 
                             src="{{ $imgUrl }}" 
                             srcset="{{ $imgUrl }} 1x, {{ str_replace('350x200', '700x400', $imgUrl) }} 2x" 
                             sizes="(max-width: 600px) 140px, 300px" 
-                            class="product-img" alt="{{ $product->name }}">
+                            class="product-img" alt="{{ $product->name }}"> -->
+                        <img src="{{ $product->image_url ? asset('storage/' . $product->image_url) : 'https://via.placeholder.com/350x200?text=No+Image' }}" class="card-img-top" alt="{{ $product->name }}">
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title text-truncate">{{ $product->name }}</h5>
                             <p class="card-text text-muted small text-truncate">{{ $product->description }}</p>

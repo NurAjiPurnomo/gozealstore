@@ -14,7 +14,8 @@
             @forelse($products as $product)
                 <div class="col-6 col-md-4 col-lg-3 mb-4">
                     <div class="card h-100 shadow-sm border-0 product-card" style="transition: transform 0.3s, box-shadow 0.3s;">
-                        <img src="{{ $product->image_url ?? 'https://via.placeholder.com/350x200?text=No+Image' }}" class="card-img-top" alt="{{ $product->name }}" style="height:180px;object-fit:cover;border-top-left-radius:0.5rem;border-top-right-radius:0.5rem;">
+                        <!-- <img src="{{ $product->image_url ?? 'https://via.placeholder.com/350x200?text=No+Image' }}" class="card-img-top" alt="{{ $product->name }}" style="height:180px;object-fit:cover;border-top-left-radius:0.5rem;border-top-right-radius:0.5rem;"> -->
+                         <img src="{{ $product->image_url ? asset('storage/' . $product->image_url) : 'https://via.placeholder.com/350x200?text=No+Image' }}" class="card-img-top" alt="{{ $product->name }}">
                         <div class="card-body d-flex flex-column">
                             <h6 class="card-title fw-semibold mb-2 text-truncate">{{ $product->name }}</h6>
                             <p class="card-text small text-muted mb-2 text-truncate">{{ $product->description }}</p>
