@@ -114,6 +114,10 @@ class HomepageController extends Controller
 
     public function cart()
     {
+        if (!auth()->guard('customer')->check()) {
+            return redirect()->route('customer.login'); // arahkan ke halaman login customer jika belum login
+        }
+
         $cart = Cart::query()
             ->with(
                 [
