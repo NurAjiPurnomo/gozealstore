@@ -50,6 +50,52 @@
             background-color: #dcdcdc;
         }
 
+        /* Toggle Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 20px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
         /* Responsive styles for mobile */
         @media (max-width: 768px) {
             .card-table {
@@ -127,6 +173,7 @@
                     <th class="px-5 py-3 text-left">Slug</th>
                     <th class="px-5 py-3 text-left">Description</th>
                     <th class="px-5 py-3 text-left">Created</th>
+                    <th class="px-5 py-3 text-left">On/Off</th>
                     <th class="px-5 py-3 text-left">Actions</th>
                 </tr>
             </thead>
@@ -152,6 +199,16 @@
                     </td>
                     <td class="px-5 py-4 text-gray-500 text-sm" data-label="Created" role="cell">
                         {{ $category->created_at->format('d M Y') }}
+                    </td>
+                    <td class="px-5 py-4" data-label="On/Off" role="cell">
+                        <form id="toggle-form-{{ $category->id }}" action="{{ route('categories.toggle', $category->id) }}" method="POST" style="display:inline-block;">
+                            @csrf
+                            @method('PATCH')
+                            <label class="switch">
+                                <input type="checkbox" onchange="this.form.submit()" {{ $category->is_active ? 'checked' : '' }}>
+                                <span class="slider round"></span>
+                            </label>
+                        </form>
                     </td>
                     <td class="px-5 py-4" data-label="Actions" role="cell">
                         <flux:dropdown>

@@ -1,11 +1,9 @@
 <?php
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use function pest\Laravel\{actingAs, get};
-
-
-use App\Models\User;
 use App\Models\Categories;
+use App\Models\User;
+
+use function pest\Laravel\actingAs;
 
 test('admin user can access product categories page', function () {
     $admin = User::factory()->create();
@@ -27,7 +25,7 @@ test('admin user can create new product categories', function () {
     $newCategori = [
         'name' => 'Testing New Category',
         'slug' => 'testing new-category',
-        'description' => 'This is a new testing category.'
+        'description' => 'This is a new testing category.',
     ];
 
     actingAs($admin)
@@ -35,7 +33,7 @@ test('admin user can create new product categories', function () {
         ->assertRedirect();
 
     $latestCategory = Categories::latest('id')->first();
-    
+
     expect($latestCategory)
         ->name->toBe($newCategori['name'])
         ->slug->toBe($newCategori['slug'])
@@ -47,18 +45,18 @@ test('admin user can update product categories', function () {
     $category = Categories::factory()->create();
 
     actingAs($admin)
-        ->get('/dashboard/categories/' . $category->id . '/edit')
+        ->get('/dashboard/categories/'.$category->id.'/edit')
         ->assertStatus(200)
         ->assertSee('Product Categories');
 
     $updatedCategory = [
         'name' => 'Updated Category Name',
         'slug' => 'updated-category-name',
-        'description' => 'This is an updated category description.'
+        'description' => 'This is an updated category description.',
     ];
 
     actingAs($admin)
-        ->put('/dashboard/categories/' . $category->id, $updatedCategory)
+        ->put('/dashboard/categories/'.$category->id, $updatedCategory)
         ->assertRedirect();
 
     $category->refresh();
@@ -74,7 +72,7 @@ test('admin user can delete product categories', function () {
     $category = Categories::factory()->create();
 
     actingAs($admin)
-        ->delete('/dashboard/categories/' . $category->id)
+        ->delete('/dashboard/categories/'.$category->id)
         ->assertRedirect();
 
     expect(Categories::find($category->id))->toBeNull();

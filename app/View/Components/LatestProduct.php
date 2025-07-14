@@ -2,23 +2,25 @@
 
 namespace App\View\Components;
 
+use App\CmsTrait;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
-use App\Models\Theme;
-
-use App\CmsTrait;
 
 class LatestProduct extends Component
 {
     use CmsTrait;
+
     /**
      * Create a new component instance.
      */
+    public $id;
 
-    public $id, $title, $description;
+    public $title;
 
-    public function __construct($id=null, $title = null, $description = null)
+    public $description;
+
+    public function __construct($id = null, $title = null, $description = null)
     {
         $this->id = $id;
         $this->title = $title;

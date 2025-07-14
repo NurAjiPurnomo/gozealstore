@@ -2,11 +2,10 @@
 
 namespace App\View\Components;
 
+use Binafy\LaravelCart\Models\Cart;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
-
-use \Binafy\LaravelCart\Models\Cart;
 
 class CartIcon extends Component
 {
@@ -25,25 +24,24 @@ class CartIcon extends Component
     {
         $total = 0;
 
-        if(auth()->guard('customer')->check()){
+        if (auth()->guard('customer')->check()) {
             $cart = Cart::query()
                 ->with(
                     [
                         'items',
-                        'items.itemable'
+                        'items.itemable',
                     ]
                 )
                 ->where('user_id', auth()->guard('customer')->user()->id)
                 ->first();
 
-            if($cart){
+            if ($cart) {
                 $total = count($cart->items);
             }
         }
-        
 
-        return view('components.cart-icon',[
-            'total'=>$total
+        return view('components.cart-icon', [
+            'total' => $total,
         ]);
     }
 }

@@ -2,15 +2,25 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Binafy\LaravelCart\Cartable;
+use Illuminate\Database\Eloquent\Model;
 
-class Product  extends Model implements Cartable
+class Product extends Model implements Cartable
 {
     protected $appends = ['image_url'];
 
-    public function category(){
-        return $this->belongsTo(Categories::class,'product_category_id');
+    protected $fillable = [
+        'name',
+        'product_category_id',
+        'sku',
+        'price',
+        'image',
+        'is_active',
+    ];
+
+    public function category()
+    {
+        return $this->belongsTo(Categories::class, 'product_category_id');
     }
 
     public function getPrice(): float
@@ -24,8 +34,9 @@ class Product  extends Model implements Cartable
             return $this->attributes['image_url'];
         }
         if (isset($this->attributes['image']) && $this->attributes['image']) {
-            return asset('storage/' . $this->attributes['image']);
+            return asset('storage/'.$this->attributes['image']);
         }
+
         return null;
     }
 }

@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use App\Models\Categories;
 use App\Models\Product;
 use App\Models\Theme;
-
-use \Binafy\LaravelCart\Models\Cart;
+use Binafy\LaravelCart\Models\Cart;
+use Illuminate\Http\Request;
 
 class HomepageController extends Controller
 {
@@ -26,24 +24,26 @@ class HomepageController extends Controller
 
     public function index()
     {
-        $categories = Categories::latest()->take(4)->get();
-        $products = Product::paginate(20);
-        
-        return view($this->themeFolder.'.homepage',[
+        $categories = Categories::where('is_active', true)->latest()->take(4)->get();
+        $products = Product::where('is_active', true)->paginate(20);
+
+        return view($this->themeFolder.'.homepage', [
             'categories' => $categories,
-            'products'=>$products,
-            'title'=>'Homepage'
+            'products' => $products,
+            'title' => 'Homepage',
         ]);
     }
 
     public function products(Request $request)
     {
-        $title = "Products";
+        $title = 'Products';
 
-        $query = Product::query();
+        $query = Product::where('is_active', true)->whereHas('category', function ($q) {
+            $q->where('is_active', true);
+        });
 
         if ($request->has('search') && $request->search) {
-            $query->where('name', 'like', '%' . $request->search . '%');
+            $query->where('name', 'like', '%'.$request->search.'%');
         }
 
         $products = $query->paginate(20);
@@ -51,23 +51,29 @@ class HomepageController extends Controller
         // Ensure image_url accessor is appended for each product
         $products->getCollection()->transform(function ($product) {
             $product->append('image_url');
+
             return $product;
         });
 
-        return view($this->themeFolder.'.products',[
-            'title'=>$title,
+        return view($this->themeFolder.'.products', [
+            'title' => $title,
             'products' => $products,
         ]);
     }
 
-    public function product($slug){
-        $product = Product::whereSlug($slug)->first();
+    public function product($slug)
+    {
+        $product = Product::where('is_active', true)->whereHas('category', function ($q) {
+            $q->where('is_active', true);
+        })->whereSlug($slug)->first();
 
-        if (!$product) {
+        if (! $product) {
             return abort(404);
         }
 
-        $relatedProducts = Product::where('product_category_id', $product->product_category_id)
+        $relatedProducts = Product::where('is_active', true)->whereHas('category', function ($q) {
+            $q->where('is_active', true);
+        })->where('product_category_id', $product->product_category_id)
             ->where('id', '!=', $product->id)
             ->take(4)
             ->get();
@@ -81,64 +87,62 @@ class HomepageController extends Controller
 
     public function categories()
     {
-        $categories = Categories::latest()->paginate(20);
+        $categories = Categories::where('is_active', true)->latest()->paginate(20);
 
-        return view($this->themeFolder.'.categories',[
-            'title'=>'Categories',
+        return view($this->themeFolder.'.categories', [
+            'title' => 'Categories',
             'categories' => $categories,
         ]);
     }
 
     public function category($slug)
     {
-        $category = Categories::whereSlug($slug)->first();
+        $category = Categories::where('is_active', true)->get()->firstWhere('slug', $slug);
 
-        if($category){
-            $products = Product::where('product_category_id',$category->id)->paginate(20);
+        if ($category) {
+            $products = Product::where('is_active', true)->where('product_category_id', $category->id)->paginate(20);
 
             // Append image_url accessor for each product
             $products->getCollection()->transform(function ($product) {
                 $product->append('image_url');
+
                 return $product;
             });
 
             return view($this->themeFolder.'.category_by_slug', [
-                'slug' => $slug, 
+                'slug' => $slug,
                 'category' => $category,
                 'products' => $products,
             ]);
-        }else{
+        } else {
             return abort(404);
         }
     }
 
     public function cart()
     {
-        if (!auth()->guard('customer')->check()) {
+        if (! auth()->guard('customer')->check()) {
             return redirect()->route('customer.login'); // arahkan ke halaman login customer jika belum login
         }
 
         $cart = Cart::query()
-            ->with(
-                [
-                    'items',
-                    'items.itemable'
-                ]
-            )
+            ->with([
+                'items',
+                'items.itemable',
+            ])
             ->where('user_id', auth()->guard('customer')->user()->id)
             ->first();
-        
 
-        return view($this->themeFolder.'.cart',[
-            'title'=>'Cart',
+        return view($this->themeFolder.'.cart', [
+            'title' => 'Cart',
             'cart' => $cart,
         ]);
     }
 
     public function checkout()
     {
-        return view($this->themeFolder.'.checkout',[
-            'title'=>'Checkout'
+        return view($this->themeFolder.'.checkout', [
+            'title' => 'Checkout',
         ]);
     }
 }

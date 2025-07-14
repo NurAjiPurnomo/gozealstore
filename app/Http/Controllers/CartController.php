@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use \Binafy\LaravelCart\Models\Cart;
-use \Binafy\LaravelCart\Models\CartItem;
 use App\Models\Product;
+use Binafy\LaravelCart\Models\Cart;
+use Binafy\LaravelCart\Models\CartItem;
+use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
     private $cart;
 
-    public function __construct(){
+    public function __construct()
+    {
         $this->cart = Cart::query()->firstOrCreate(['user_id' => auth()->guard('customer')->user()->id]);
     }
 
@@ -32,7 +33,7 @@ class CartController extends Controller
 
         // Find the product
         $product = Product::findOrFail($request->product_id);
-        
+
         // Check if the product is available
         if ($product->stock < $request->quantity) {
             return redirect()->back()->with('error', 'Insufficient stock for this product.');
@@ -64,13 +65,12 @@ class CartController extends Controller
 
         $product = Product::findOrFail($id);
 
-        if($request->action == 'decrease')
-        {
+        if ($request->action == 'decrease') {
             $this->cart->decreaseQuantity(item: $product);
-        }else if($request->action == 'increase'){
+        } elseif ($request->action == 'increase') {
             $this->cart->increaseQuantity(item: $product);
         }
-        
+
         return redirect()->route('cart.index')->with('success', 'Cart updated successfully.');
     }
 }

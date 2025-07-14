@@ -26,9 +26,9 @@ return new class extends Migration
 
             // Foreign Key Constraint
             $table->foreign('product_category_id')
-                  ->references('id')->on('product_categories')
-                  ->onDelete('set null')
-                  ->onUpdate('cascade');
+                ->references('id')->on('product_categories')
+                ->onDelete('set null')
+                ->onUpdate('cascade');
         });
     }
 

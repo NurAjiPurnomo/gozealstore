@@ -15,7 +15,7 @@ class ApiController extends Controller
             // Memeriksa apakah request berhasil
             if ($response->successful()) {
                 $data = $response->json(); // Mengubah response menjadi format JSON
-                
+
                 return view('api_view', ['data' => $data]); // Kirim data ke view
             } else {
                 // Menangani error jika request gagal
@@ -24,7 +24,7 @@ class ApiController extends Controller
 
         } catch (\Exception $e) {
             // Menangani exception yang mungkin terjadi
-            return 'Terjadi kesalahan: ' . $e->getMessage();
+            return 'Terjadi kesalahan: '.$e->getMessage();
         }
     }
 
@@ -39,13 +39,14 @@ class ApiController extends Controller
 
             if ($response->successful()) {
                 $data = $response->json();
+
                 return view('api_view', ['data' => $data]);
             } else {
                 return 'Terjadi kesalahan saat mengirim data ke API.';
             }
 
         } catch (\Exception $e) {
-            return 'Terjadi kesalahan: ' . $e->getMessage();
+            return 'Terjadi kesalahan: '.$e->getMessage();
         }
     }
 }

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Theme;
+use Illuminate\Http\Request;
 
 class ThemeController extends Controller
 {
@@ -14,8 +14,8 @@ class ThemeController extends Controller
     {
         $themes = Theme::query()
             ->when($request->q, function ($query) use ($request) {
-                $query->where('name', 'like', '%' . $request->q . '%')
-                      ->orWhere('folder', 'like', '%' . $request->q . '%');
+                $query->where('name', 'like', '%'.$request->q.'%')
+                    ->orWhere('folder', 'like', '%'.$request->q.'%');
             })
             ->orderBy('created_at', 'desc')
             ->paginate(10);
@@ -46,15 +46,15 @@ class ThemeController extends Controller
             'status' => 'required|in:active,inactive',
         ]);
 
-        if($request->status === 'active') {
+        if ($request->status === 'active') {
             Theme::where('status', 'active')->update(['status' => 'inactive']);
         }
 
-        $theme = new Theme();
+        $theme = new Theme;
         $theme->name = $request->name;
         $theme->description = $request->description;
         $theme->folder = $request->folder;
-        $theme->status = $request->has('status') ? 'active' : 'inactive';;
+        $theme->status = $request->has('status') ? 'active' : 'inactive';
         $theme->save();
 
         return redirect()->route('themes.index')->with('successMessage', 'Theme created successfully.');
@@ -66,6 +66,7 @@ class ThemeController extends Controller
     public function show(string $id)
     {
         $theme = Theme::findOrFail($id);
+
         return view('dashboard.themes.show', compact('theme'));
     }
 
@@ -75,6 +76,7 @@ class ThemeController extends Controller
     public function edit(string $id)
     {
         $theme = Theme::findOrFail($id);
+
         return view('dashboard.themes.edit', compact('theme'));
     }
 
@@ -90,7 +92,7 @@ class ThemeController extends Controller
             'status' => 'required|in:active,inactive',
         ]);
 
-        if($request->status === 'active') {
+        if ($request->status === 'active') {
             Theme::where('status', 'active')->update(['status' => 'inactive']);
         }
 

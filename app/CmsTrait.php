@@ -13,7 +13,7 @@ trait CmsTrait
         if ($theme) {
             $themeFolder = $theme->folder;
         } else {
-            $themeFolder = "theme.default";
+            $themeFolder = 'theme.default';
         }
 
         return $themeFolder;

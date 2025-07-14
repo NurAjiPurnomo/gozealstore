@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Categories;
 use App\Models\Product;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class ProductController extends Controller
@@ -20,9 +20,9 @@ class ProductController extends Controller
         // Mencari produk berdasarkan nama dan deskripsi jika ada pencarian
         $products = Product::when($q, function ($query, $q) {
             return $query->where('name', 'like', "%{$q}%")
-                         ->orWhere('description', 'like', "%{$q}%");
+                ->orWhere('description', 'like', "%{$q}%");
         })->paginate(10); // Menampilkan hasil produk dengan pagination
-        
+
         return view('dashboard.products.index', compact('products', 'q'));
     }
 
@@ -32,13 +32,13 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Categories::all();
-        return view('dashboard.products.create', compact('categories')); 
+
+        return view('dashboard.products.create', compact('categories'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-
     private function generateUniqueSlug($name, $id = null)
     {
         $slug = Str::slug($name);
@@ -49,7 +49,7 @@ class ProductController extends Controller
             ->when($id, function ($query) use ($id) {
                 return $query->where('id', '!=', $id);
             })->exists()) {
-            $slug = $originalSlug . '-' . $count;
+            $slug = $originalSlug.'-'.$count;
             $count++;
         }
 
@@ -58,7 +58,7 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        if (!$request->filled('slug')) {
+        if (! $request->filled('slug')) {
             $request->merge(['slug' => $this->generateUniqueSlug($request->name)]);
         }
 
@@ -78,7 +78,7 @@ class ProductController extends Controller
             return redirect()->back()->with(
                 [
                     'errors' => $validator->errors(),
-                    'errorMessage' => 'Validasi Error, Silahkan lengkapi data terlebih dahulu'
+                    'errorMessage' => 'Validasi Error, Silahkan lengkapi data terlebih dahulu',
                 ]
             );
         }
@@ -95,7 +95,7 @@ class ProductController extends Controller
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
+            $imageName = time().'_'.$image->getClientOriginalName();
             $imagePath = $image->storeAs('uploads/products', $imageName, 'public');
             $product->image_url = $imagePath;
         }
@@ -104,7 +104,7 @@ class ProductController extends Controller
 
         return redirect()->route('products.index')->with(
             [
-                'success' => 'Produk berhasil ditambahkan.'
+                'success' => 'Produk berhasil ditambahkan.',
             ]
         );
     }
@@ -135,7 +135,7 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
 
-        if (!$request->filled('slug')) {
+        if (! $request->filled('slug')) {
             $request->merge(['slug' => $this->generateUniqueSlug($request->name, $product->id)]);
         }
 
@@ -143,7 +143,7 @@ class ProductController extends Controller
             'name' => 'required|string|max:255',
             // hapus validasi slug karena slug tidak diinput user
             'description' => 'nullable|string',
-            'sku' => 'required|string|unique:products,sku,' . $product->id,
+            'sku' => 'required|string|unique:products,sku,'.$product->id,
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'product_category_id' => 'nullable|exists:product_categories,id',
@@ -155,7 +155,7 @@ class ProductController extends Controller
             return redirect()->back()->with(
                 [
                     'errors' => $validator->errors(),
-                    'errorMessage' => 'Validasi Error, Silahkan lengkapi data terlebih dahulu'
+                    'errorMessage' => 'Validasi Error, Silahkan lengkapi data terlebih dahulu',
                 ]
             );
         }
@@ -169,7 +169,7 @@ class ProductController extends Controller
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
+            $imageName = time().'_'.$image->getClientOriginalName();
             $imagePath = $image->storeAs('uploads/products', $imageName, 'public');
             $product->image_url = $imagePath;
         }
@@ -179,7 +179,7 @@ class ProductController extends Controller
         return redirect()->route('products.index')
             ->with(
                 [
-                    'successMessage' => 'Data Berhasil Diupdate'
+                    'successMessage' => 'Data Berhasil Diupdate',
                 ]
             );
     }
@@ -195,5 +195,21 @@ class ProductController extends Controller
 
         return redirect()->route('products.index')
             ->with('successMessage', 'Data Berhasil Dihapus');
+    }
+
+    /**
+     * Toggle the active status of the product.
+     */
+    public function toggle(string $id)
+    {
+        if (request()->method() !== 'PATCH') {
+            abort(405, 'Method Not Allowed');
+        }
+
+        $product = Product::findOrFail($id);
+        $product->is_active = !$product->is_active;
+        $product->save();
+
+        return redirect()->back()->with('successMessage', 'Status produk berhasil diubah.');
     }
 }

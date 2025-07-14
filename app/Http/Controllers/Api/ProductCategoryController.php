@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-
-use App\Models\Categories;
 use App\Http\Resources\ProductCategoryResource;
+use App\Models\Categories;
+use Illuminate\Http\Request;
 
 class ProductCategoryController extends Controller
 {
@@ -22,10 +21,10 @@ class ProductCategoryController extends Controller
         $validator = \Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:product_categories,slug',
-            'description' => 'required'
+            'description' => 'required',
         ]);
 
-        //check if validation fails
+        // check if validation fails
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
@@ -34,10 +33,10 @@ class ProductCategoryController extends Controller
         $category->name = $request->name;
         $category->slug = $request->slug;
         $category->description = $request->description;
-        
+
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
+            $imageName = time().'_'.$image->getClientOriginalName();
             $imagePath = $image->storeAs('uploads/categories', $imageName, 'public');
             $category->image = $imagePath;
         }
@@ -51,7 +50,7 @@ class ProductCategoryController extends Controller
     {
         $category = Categories::findOrFail($id);
 
-        return new ProductCategoryResource($category, 200, 'Product Category Details', );
+        return new ProductCategoryResource($category, 200, 'Product Category Details');
     }
 
     public function update(Request $request, $id)
@@ -59,10 +58,10 @@ class ProductCategoryController extends Controller
         $validator = \Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255',
-            'description' => 'required'
+            'description' => 'required',
         ]);
 
-        //check if validation fails
+        // check if validation fails
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
@@ -74,7 +73,7 @@ class ProductCategoryController extends Controller
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
+            $imageName = time().'_'.$image->getClientOriginalName();
             $imagePath = $image->storeAs('uploads/categories', $imageName, 'public');
             $category->image = $imagePath;
         }

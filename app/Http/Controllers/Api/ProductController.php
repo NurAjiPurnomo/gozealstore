@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-
-use App\Models\Product;
 use App\Http\Resources\ProductResource;
+use App\Models\Product;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
@@ -30,7 +29,7 @@ class ProductController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',  // Validasi gambar upload
         ]);
 
-        //check if validation fails
+        // check if validation fails
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
@@ -47,7 +46,7 @@ class ProductController extends Controller
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
+            $imageName = time().'_'.$image->getClientOriginalName();
             $imagePath = $image->storeAs('uploads/products', $imageName, 'public');
             $product->image_url = $imagePath;
         }
@@ -63,16 +62,16 @@ class ProductController extends Controller
 
         return new ProductResource($product, 200, 'Product Details');
     }
-    
+
     public function update(Request $request, $id)
     {
         $product = Product::findOrFail($id);
 
         $validator = \Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:products,slug,' . $product->id,
+            'slug' => 'required|string|max:255|unique:products,slug,'.$product->id,
             'description' => 'nullable|string',
-            'sku' => 'required|string|unique:products,sku,' . $product->id,
+            'sku' => 'required|string|unique:products,sku,'.$product->id,
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'product_category_id' => 'nullable|exists:product_categories,id',
@@ -93,7 +92,7 @@ class ProductController extends Controller
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
+            $imageName = time().'_'.$image->getClientOriginalName();
             $imagePath = $image->storeAs('uploads/products', $imageName, 'public');
             $product->image_url = $imagePath;
         }
@@ -102,7 +101,7 @@ class ProductController extends Controller
 
         return new ProductResource($product, 201, 'Product Updated Successfully');
     }
-    
+
     public function destroy($id)
     {
         $product = Product::findOrFail($id);

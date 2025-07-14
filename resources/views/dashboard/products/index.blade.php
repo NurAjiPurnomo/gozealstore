@@ -1,4 +1,51 @@
 <x-layouts.app :title="__('Products')">
+    <style>
+        /* Toggle Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 20px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+    </style>
     <div class="relative mb-6 w-full">
         <flux:heading size="xl">Products</flux:heading>
         <flux:subheading size="lg" class="mb-6">Manage data Products</flux:subheading>
@@ -99,9 +146,14 @@
                             </p>
                         </td>
                         <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                            <p class="text-gray-900 whitespace-no-wrap">
-                                {{ $product->is_active ? 'Yes' : 'No' }}
-                            </p>
+                            <form id="toggle-form-{{ $product->id }}" action="{{ route('products.toggle', $product->id) }}" method="POST" style="display:inline-block;">
+                                @csrf
+                                @method('PATCH')
+                                <label class="switch">
+                                    <input type="checkbox" onchange="this.form.submit()" {{ $product->is_active ? 'checked' : '' }}>
+                                    <span class="slider round"></span>
+                                </label>
+                            </form>
                         </td>
                         <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                             <p class="text-gray-900 whitespace-no-wrap">

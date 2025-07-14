@@ -31,6 +31,8 @@
 
         <flux:input type="file" label="Image" name="image" class="mb-3" />
 
+        <flux:checkbox label="Active" name="is_active" class="mb-3" :checked="$category->is_active" />
+
         <flux:separator />
 
         <div class="mt-4">

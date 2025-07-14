@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
-use App\Models\CartItem;
-use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
@@ -13,40 +11,37 @@ class OrderController extends Controller
         // Eager load relationships to reduce queries
         $orders = Order::with(
             [
-                'customer', 
-                'items'=>function($query){
+                'customer',
+                'items' => function ($query) {
                     $query->orderByDesc('created_at');
                 },
-                'items.product'
+                'items.product',
             ]
         )->withCount(['items'])
-        ->get();
+            ->get();
 
         $orderData = [];
-        foreach($orders as $key=>$order)
-        {
+        foreach ($orders as $key => $order) {
             $customer = $order->customer;
             $items = $order->items;
             $totalAmount = 0;
-            $itemsCount = count($order->items);   
+            $itemsCount = count($order->items);
             $completedOrderExists = [];
 
-            foreach($items as $keyItem=>$item)
-            {
+            foreach ($items as $keyItem => $item) {
                 $product = $item->product;
                 $totalAmount += $item->price * $item->quantity;
 
-                if($keyItem === 0) {
+                if ($keyItem === 0) {
                     // Get the last added to cart time for the first item
                     $lastAddedToCart = $item->created_at;
                 }
             }
 
             // Check if the order is completed
-            if($order->status === 'completed') {
+            if ($order->status === 'completed') {
                 $completedOrderExists = true;
-            }
-            else {
+            } else {
                 $completedOrderExists = false;
             }
 
@@ -58,19 +53,18 @@ class OrderController extends Controller
                 'last_added_to_cart' => $lastAddedToCart,
                 'completed_order_exists' => $completedOrderExists,
                 'created_at' => $order->created_at,
-                'completed_at'=> $completedOrderExists ? $order->completed_at : null,
+                'completed_at' => $completedOrderExists ? $order->completed_at : null,
             ];
         }
 
-        
         // Sort by completed_at descending, nulls last
-        usort($orderData, function($a, $b) {
+        usort($orderData, function ($a, $b) {
             $aCompletedAt = $a['completed_at'] ? strtotime($a['completed_at']) : 0;
             $bCompletedAt = $b['completed_at'] ? strtotime($b['completed_at']) : 0;
+
             return strtotime($bCompletedAt) - strtotime($aCompletedAt);
         });
 
         return view('orders.index', ['orders' => $orderData]);
     }
 }
-

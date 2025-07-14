@@ -1,7 +1,7 @@
 <x-layout>
 
     <div class="d-flex justify-content-center align-items-center" style="min-height: 80vh;">
-        <div class="card shadow-sm p-4" style="min-width: 350px; max-width: 400px; width: 100%;">
+<div class="card shadow-sm p-4" style="min-width: 350px; max-width: 400px; width: 100%;">
             <h3 class="mb-4 text-center">Login</h3>
 
             @if(session('errorMessage'))

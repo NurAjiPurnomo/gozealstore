@@ -13,7 +13,9 @@ class ProductResource extends JsonResource
      * @return array<string, mixed>
      */
     public $status;
+
     public $message;
+
     public $resource;
 
     public function __construct($resource, $status = 200, $message = 'Success')
@@ -28,7 +30,7 @@ class ProductResource extends JsonResource
         return [
             'success' => $this->status,
             'message' => $this->message,
-            'data' => $this->resource
+            'data' => $this->resource,
         ];
     }
 }
