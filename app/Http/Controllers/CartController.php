@@ -52,23 +52,21 @@ class CartController extends Controller
 
     public function remove($id)
     {
+        $cartItem = CartItem::findOrFail($id);
 
-        $product = Product::findOrFail($id);
-
-        $this->cart->removeItem($product);
+        $this->cart->removeItem($cartItem);
 
         return redirect()->route('cart.index')->with('success', 'Item removed from cart.');
     }
 
     public function update($id, Request $request)
     {
-
-        $product = Product::findOrFail($id);
+        $cartItem = CartItem::findOrFail($id);
 
         if ($request->action == 'decrease') {
-            $this->cart->decreaseQuantity(item: $product);
+            $this->cart->decreaseQuantity(item: $cartItem);
         } elseif ($request->action == 'increase') {
-            $this->cart->increaseQuantity(item: $product);
+            $this->cart->increaseQuantity(item: $cartItem);
         }
 
         return redirect()->route('cart.index')->with('success', 'Cart updated successfully.');

@@ -10,7 +10,8 @@
    {{ $style ?? '' }}
 
    <style>
-      /* Style global tema hitam putih */
+
+         /* Style global tema hitam putih */
       body {
          background-color: #fff !important;
          color: #000 !important;

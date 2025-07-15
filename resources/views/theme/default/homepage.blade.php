@@ -7,6 +7,9 @@
             border-radius: .75rem;
             overflow: hidden;
             transition: transform 0.3s, box-shadow 0.3s;
+            min-width: 120px;
+            padding: 1rem 0.5rem;
+            height: 320px;
         }
         .category-card:hover, .product-card:hover {
             transform: translateY(-5px);
@@ -28,33 +31,51 @@
             object-fit: contain;
         }
         .product-img {
-            height: 300px;
+            height: 120px;
             max-width: 100%;
             object-fit: cover;
+            margin-bottom: 0.5rem;
         }
         .card-title {
             font-size: 1rem;
             font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .card-text {
             font-size: 0.85rem;
+            white-space: normal;
+            word-break: break-word;
+            max-height: 2.5rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .truncate-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
         .carousel-inner img {
-            height: 300px;
+            height: 850px;
             object-fit: cover; /* ganti ini */
-            background-color: #fff;
+            background: transparent;
+        }
+        .container.py-4 {
+            background: transparent;
         }
         @media (max-width: 767.98px) {
             .carousel-inner img {
-                height: 160px;
-            }
-            .product-card {
                 height: 300px;
             }
+            .product-card {
+                height: 260px;
+            }
             .product-img {
-                height: 150px;
-                width: 150px;
-                margin: 0 auto;
+                height: 120px;
+                width: 120px;
+                margin: 0 auto 1rem auto;
                 object-fit: cover;
             }
         }
@@ -66,42 +87,25 @@
         <div class="carousel-inner rounded shadow-sm w-100">
             <div class="carousel-item active">
                 <img 
-                    src="https://d2kchovjbwl1tk.cloudfront.net/vendors/240/assets/image/1752054365407-BANNER_SHOPEE_1_resized256-jpg.webp" 
-                    srcset="
-                        https://d2kchovjbwl1tk.cloudfront.net/vendors/240/assets/image/1752054365407-BANNER_SHOPEE_1_resized128-jpg.webp 128w,
-                        https://d2kchovjbwl1tk.cloudfront.net/vendors/240/assets/image/1752054365407-BANNER_SHOPEE_1_resized256-jpg.webp 256w,
-                        https://d2kchovjbwl1tk.cloudfront.net/vendors/240/assets/image/1752054365407-BANNER_SHOPEE_1_resized512-jpg.webp 512w,
-                        https://d2kchovjbwl1tk.cloudfront.net/vendors/240/assets/image/1752054365407-BANNER_SHOPEE_1_resized1024-jpg.webp 1024w,
-                        https://d2kchovjbwl1tk.cloudfront.net/vendors/240/assets/image/1752054365407-BANNER_SHOPEE_1_resized1200-jpg.webp 1200w,
-                        https://d2kchovjbwl1tk.cloudfront.net/vendors/240/assets/image/1752054365407-BANNER_SHOPEE_1_resized2048-jpg.webp 2048w" 
-                    sizes="100vw"
-                    class="d-block w-100 object-cover" 
-                    alt="Banner Shopee 1"
-                    loading="eager" fetchpriority="auto">
+                    src="https://d2kchovjbwl1tk.cloudfront.net/vendors/240/assets/image/1752054365407-BANNER_SHOPEE_1_resized2048-jpg.webp"
+                    class="d-block w-100" 
+                    alt="Banner Shopee 1">
             </div>
+
             <div class="carousel-item">
                 <img 
-                    src="https://d2kchovjbwl1tk.cloudfront.net/vendors/240/assets/image/1752054401211-BANNER_SHOPEE_3_resized256-jpg.webp"
-                    srcset="
-                        https://d2kchovjbwl1tk.cloudfront.net/vendors/240/assets/image/1752054401211-BANNER_SHOPEE_3_resized128-jpg.webp 128w,
-                        https://d2kchovjbwl1tk.cloudfront.net/vendors/240/assets/image/1752054401211-BANNER_SHOPEE_3_resized256-jpg.webp 256w,
-                        https://d2kchovjbwl1tk.cloudfront.net/vendors/240/assets/image/1752054401211-BANNER_SHOPEE_3_resized512-jpg.webp 512w,
-                        https://d2kchovjbwl1tk.cloudfront.net/vendors/240/assets/image/1752054401211-BANNER_SHOPEE_3_resized1024-jpg.webp 1024w,
-                        https://d2kchovjbwl1tk.cloudfront.net/vendors/240/assets/image/1752054401211-BANNER_SHOPEE_3_resized2048-jpg.webp 2048w"
-                    sizes="(max-width: 600px) 100vw, 256px"
-                    class="d-block w-100" alt="Banner Shopee Baru">
+                    src="https://d2kchovjbwl1tk.cloudfront.net/vendors/240/assets/image/1752054392427-BANNER_SHOPEE_2_resized2048-jpg.webp"
+                    class="d-block w-100" 
+                    alt="Banner Shopee Baru">
             </div>
+
+
+
             <div class="carousel-item">
                 <img 
-                    src="https://d2kchovjbwl1tk.cloudfront.net/vendors/240/assets/image/1752054392427-BANNER_SHOPEE_2_resized256-jpg.webp"
-                    srcset="
-                        https://d2kchovjbwl1tk.cloudfront.net/vendors/240/assets/image/1752054392427-BANNER_SHOPEE_2_resized128-jpg.webp 128w,
-                        https://d2kchovjbwl1tk.cloudfront.net/vendors/240/assets/image/1752054392427-BANNER_SHOPEE_2_resized256-jpg.webp 256w,
-                        https://d2kchovjbwl1tk.cloudfront.net/vendors/240/assets/image/1752054392427-BANNER_SHOPEE_2_resized512-jpg.webp 512w,
-                        https://d2kchovjbwl1tk.cloudfront.net/vendors/240/assets/image/1752054392427-BANNER_SHOPEE_2_resized1024-jpg.webp 1024w,
-                        https://d2kchovjbwl1tk.cloudfront.net/vendors/240/assets/image/1752054392427-BANNER_SHOPEE_2_resized2048-jpg.webp 2048w"
-                    sizes="(max-width: 600px) 100vw, 256px"
-                    class="d-block w-100" alt="Banner Shopee 2">
+                    src= "https://d2kchovjbwl1tk.cloudfront.net/vendors/240/assets/image/1752054401211-BANNER_SHOPEE_3_resized2048-jpg.webp"
+                    class="d-block w-100" 
+                    alt="Banner Shopee 2">
             </div>
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
@@ -121,8 +125,8 @@
             <h3 class="fw-semibold">Kategori Produk</h3>
             <a href="{{ url('/categories') }}" class="btn btn-outline-dark btn-sm">Lihat Semua</a>
         </div>
-        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">
-            @foreach($categories as $category)
+        <div class="category-container row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">
+            @foreach($categories->take(4) as $category)
                 <div class="col">
                     <a href="{{ url('/category/'.$category->slug) }}" class="text-decoration-none text-dark">
                         <div class="card category-card text-center p-3 shadow-sm">
@@ -135,7 +139,7 @@
                             </div>
                             <div class="card-body p-2">
                                 <h6 class="card-title mb-1">{{ $category->name }}</h6>
-                                <p class="card-text text-muted text-truncate">{{ $category->description }}</p>
+                                <p class="card-text text-muted truncate-2">{{ $category->description }}</p>
                             </div>
                         </div>
                     </a>

@@ -74,8 +74,51 @@ select:focus[data-flux-control] {
     @apply outline-hidden ring-2 ring-accent ring-offset-2 ring-offset-accent-foreground;
 }
 
-
 /* \[:where(&)\]:size-4 {
     @apply size-4;
 } */
 
+@media (max-width: 767.98px) {
+    .carousel-inner img {
+        height: 160px;
+    }
+    .product-card {
+        height: 260px !important;
+        width: 260px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important;
+        margin: 0 auto 1rem auto !important;
+        box-shadow: 0 0.125rem 0.25rem rgb(0 0 0 / 0.075) !important;
+        border-radius: 0.5rem !important;
+        padding: 0.75rem !important;
+        overflow: hidden !important;
+    }
+    .product-img {
+        height: 120px;
+        width: 120px;
+        margin: 0 auto 1rem auto;
+        object-fit: cover;
+        border-radius: 0.5rem;
+    }
+    .product-card .card-text {
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        font-size: 0.85rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+    .product-card .card-title {
+        font-weight: 600 !important;
+        font-size: 1rem !important;
+        margin-bottom: 0.25rem !important;
+        text-align: left !important;
+    }
+    .product-card button {
+        width: auto !important;
+        padding: 0.25rem 0.75rem !important;
+        font-size: 0.85rem !important;
+    }
+}
