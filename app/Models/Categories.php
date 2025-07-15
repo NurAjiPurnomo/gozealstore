@@ -16,6 +16,5 @@ class Categories extends Model
         'slug',
         'description',
         'image',
-        'is_active',
     ];
 }

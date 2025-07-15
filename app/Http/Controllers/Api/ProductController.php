@@ -42,7 +42,6 @@ class ProductController extends Controller
         $product->price = $request->price;
         $product->stock = $request->stock;
         $product->product_category_id = $request->product_category_id;
-        $product->is_active = $request->has('is_active') ? $request->is_active : true;
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
@@ -76,7 +75,6 @@ class ProductController extends Controller
             'stock' => 'required|integer|min:0',
             'product_category_id' => 'nullable|exists:product_categories,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'is_active' => 'boolean',
         ]);
 
         if ($validator->fails()) {
@@ -88,7 +86,6 @@ class ProductController extends Controller
         $product->description = $request->description;
         $product->sku = $request->sku;
         $product->product_category_id = $request->product_category_id;
-        $product->is_active = $request->has('is_active') ? $request->is_active : true;
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
@@ -110,3 +107,4 @@ class ProductController extends Controller
         return response()->json(['success' => true, 'message' => 'Product Deleted Successfully']);
     }
 }
+</create_file>

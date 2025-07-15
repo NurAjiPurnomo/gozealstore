@@ -24,8 +24,8 @@ class HomepageController extends Controller
 
     public function index()
     {
-        $categories = Categories::where('is_active', true)->latest()->take(4)->get();
-        $products = Product::where('is_active', true)->paginate(20);
+        $categories = Categories::latest()->take(4)->get();
+        $products = Product::paginate(20);
 
         return view($this->themeFolder.'.homepage', [
             'categories' => $categories,
@@ -38,8 +38,8 @@ class HomepageController extends Controller
     {
         $title = 'Products';
 
-        $query = Product::where('is_active', true)->whereHas('category', function ($q) {
-            $q->where('is_active', true);
+        $query = Product::whereHas('category', function ($q) {
+            $q->whereNotNull('id');
         });
 
         if ($request->has('search') && $request->search) {
@@ -63,16 +63,16 @@ class HomepageController extends Controller
 
     public function product($slug)
     {
-        $product = Product::where('is_active', true)->whereHas('category', function ($q) {
-            $q->where('is_active', true);
+        $product = Product::whereHas('category', function ($q) {
+            $q->whereNotNull('id');
         })->whereSlug($slug)->first();
 
         if (! $product) {
             return abort(404);
         }
 
-        $relatedProducts = Product::where('is_active', true)->whereHas('category', function ($q) {
-            $q->where('is_active', true);
+        $relatedProducts = Product::whereHas('category', function ($q) {
+            $q->whereNotNull('id');
         })->where('product_category_id', $product->product_category_id)
             ->where('id', '!=', $product->id)
             ->take(4)
@@ -87,7 +87,7 @@ class HomepageController extends Controller
 
     public function categories()
     {
-        $categories = Categories::where('is_active', true)->latest()->paginate(20);
+        $categories = Categories::latest()->paginate(20);
 
         return view($this->themeFolder.'.categories', [
             'title' => 'Categories',
@@ -97,10 +97,10 @@ class HomepageController extends Controller
 
     public function category($slug)
     {
-        $category = Categories::where('is_active', true)->get()->firstWhere('slug', $slug);
+        $category = Categories::get()->firstWhere('slug', $slug);
 
         if ($category) {
-            $products = Product::where('is_active', true)->where('product_category_id', $category->id)->paginate(20);
+            $products = Product::where('product_category_id', $category->id)->paginate(20);
 
             // Append image_url accessor for each product
             $products->getCollection()->transform(function ($product) {

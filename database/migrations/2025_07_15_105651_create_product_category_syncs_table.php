@@ -4,15 +4,15 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddIsActiveToProductsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->boolean('is_active')->default(true)->after('product_category_id');
+        Schema::table('product_categories', function (Blueprint $table) {
+            $table->string('hub_category_id')->nullable(); 
         });
     }
 
@@ -21,8 +21,6 @@ class AddIsActiveToProductsTable extends Migration
      */
     public function down(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->dropColumn('is_active');
-        });
+        Schema::dropIfExists('product_category_syncs');
     }
-}
+};

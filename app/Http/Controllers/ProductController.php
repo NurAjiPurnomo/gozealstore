@@ -6,6 +6,7 @@ use App\Models\Categories;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Http;
 
 class ProductController extends Controller
 {
@@ -91,8 +92,6 @@ class ProductController extends Controller
         $product->price = $request->price;
         $product->stock = $request->stock;
         $product->product_category_id = $request->product_category_id;
-        $product->is_active = $request->has('is_active') ? $request->is_active : true;
-
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $imageName = time().'_'.$image->getClientOriginalName();
@@ -165,7 +164,6 @@ class ProductController extends Controller
         $product->description = $request->description;
         $product->sku = $request->sku;
         $product->product_category_id = $request->product_category_id;
-        $product->is_active = $request->has('is_active') ? $request->is_active : true;
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
@@ -207,9 +205,51 @@ class ProductController extends Controller
         }
 
         $product = Product::findOrFail($id);
-        $product->is_active = !$product->is_active;
-        $product->save();
 
         return redirect()->back()->with('successMessage', 'Status produk berhasil diubah.');
     }
+
+    /**
+ * Toggle the active status and sync status of the product at once.
+ */
+    public function toggleAll(string $id)
+    {
+        if (request()->method() !== 'PATCH') {
+            abort(405, 'Method Not Allowed');
+        }
+
+        $product = Product::findOrFail($id);
+
+        return redirect()->back()->with('successMessage', 'Status produk & sync berhasil diubah.');
+    }
+
+    public function sync($id, Request $request)
+      {
+          $product = Product::findOrFail($id);
+  
+          $response = Http::post('https://api.phb-umkm.my.id/api/product/sync', [
+              'client_id' => env('CLIENT_ID'),
+              'client_secret' => env('CLIENT_SECRET'),
+              'seller_product_id' => (string) $product->id,
+              'name' => $product->name,
+              'description' => $product->description,
+              'price' => $product->price,
+              'stock' => $product->stock,
+              'sku' => $product->sku,
+              'image_url' => $product->image_url,
+              'weight' => $product->weight,
+              'is_active' => $request->is_active == 1 ? false : true,
+              'category_id' => (string) $product->category->hub_category_id,
+          ]);
+  
+          if ($response->successful() && isset($response['product_id'])) {
+              $product->hub_product_id = $request->is_active == 1 ? null : $response['product_id'];
+              $product->save();
+          }
+  
+          session()->flash('successMessage', 'Product Synced Successfully');
+          return redirect()->back();
+      }
+
+
 }

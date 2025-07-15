@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('product_categories', function (Blueprint $table) {
-            $table->boolean('is_active')->default(true)->after('image');
+        Schema::table('products', function (Blueprint $table) {
+            $table->unsignedBigInteger('hub_product_id')->nullable(); 
         });
     }
 
@@ -21,8 +21,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('product_categories', function (Blueprint $table) {
-            $table->dropColumn('is_active');
-        });
+        Schema::dropIfExists('product_syncs');
     }
 };

@@ -15,7 +15,6 @@ class Product extends Model implements Cartable
         'sku',
         'price',
         'image',
-        'is_active',
     ];
 
     public function category()

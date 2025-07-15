@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Categories;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class ProductCategoryController extends Controller
 {
@@ -38,20 +39,12 @@ class ProductCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        /**
-         * cek validasi input
-         */
         $validator = \Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255',
             'description' => 'required',
-            'is_active' => 'sometimes|boolean',
         ]);
 
-        /**
-         * jika validasi gagal,
-         * maka redirect kembali dengan pesan error
-         */
         if ($validator->fails()) {
             return redirect()->back()->with(
                 [
@@ -65,7 +58,6 @@ class ProductCategoryController extends Controller
         $category->name = $request->name;
         $category->slug = $request->slug;
         $category->description = $request->description;
-        $category->is_active = $request->has('is_active') ? true : false;
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
@@ -109,20 +101,12 @@ class ProductCategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        /**
-         * cek validasi input
-         */
         $validator = \Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255',
             'description' => 'required',
-            'is_active' => 'sometimes|boolean',
         ]);
 
-        /**
-         * jika validasi gagal,
-         * maka redirect kembali dengan pesan error
-         */
         if ($validator->fails()) {
             return redirect()->back()->with(
                 [
@@ -136,7 +120,6 @@ class ProductCategoryController extends Controller
         $category->name = $request->name;
         $category->slug = $request->slug;
         $category->description = $request->description;
-        $category->is_active = $request->has('is_active') ? true : false;
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
@@ -182,9 +165,29 @@ class ProductCategoryController extends Controller
         }
 
         $category = Categories::findOrFail($id);
-        $category->is_active = !$category->is_active;
-        $category->save();
 
         return redirect()->back()->with('successMessage', 'Status kategori berhasil diubah.');
     }
+
+    public function sync($id, Request $request)
+      {
+          $category = Categories::findOrFail($id);
+          
+          $response = Http::post('https://api.phb-umkm.my.id/api/product-category/sync', [
+              'client_id' => env('CLIENT_ID'),
+              'client_secret' => env('CLIENT_SECRET'),
+              'seller_product_category_id' => (string) $category->id,
+              'name' => $category->name,
+              'description' => $category->description,
+              'is_active' => $request->is_active == 1 ? false : true,
+          ]);
+  
+          if ($response->successful() && isset($response['product_category_id'])) {
+              $category->hub_category_id = $request->is_active == 1 ? null : $response['product_category_id'];
+              $category->save();
+          }
+  
+          session()->flash('successMessage', 'Category Synced Successfully');
+          return redirect()->back();
+      }
 }

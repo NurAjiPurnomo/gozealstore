@@ -65,6 +65,8 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth', 'verified']], fu
         return redirect()->route('products.index');
     });
     Route::resource('themes', ThemeController::class);
+    Route::post('products/sync/{id}', [ProductController::class, 'sync'])->name('products.sync');
+    Route::post('category/sync/{id}', [ProductCategoryController::class, 'sync'])->name('category.sync');
 
 });
 
@@ -75,5 +77,7 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/password', 'settings.password')->name('settings.password');
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
 });
+
+Route::patch('/products/{product}/toggle-all', [ProductController::class, 'toggleAll'])->name('products.toggleAll');
 
 require __DIR__.'/auth.php';
